@@ -90,8 +90,6 @@ class Notifier {
     get minuets() { return this._minuets; }
 }
 
-
-
 class StorageHelper {
     _NOTIFIER_SETTINGS = 'notifier_settings';
     constructor() {
@@ -123,7 +121,7 @@ class NotiWidget {
     }
 
     static wrapper(content) {
-        return `<div class="notifier-settings-wrapper" style="position: fixed;top: auto;bottom: 98px;right: 35px;background: rgb(218, 218, 218);padding: 15px;z-index: 10001;border-radius: 5px;display: none;min-height: 40px;">${content}</div>`
+        return `<div class="notifier-settings-wrapper" style="position: fixed;top: auto;bottom: 100px;right: 38px;background: rgb(218, 218, 218);padding: 15px;z-index: 10001;border-radius: 5px 5px 13px;display: none;min-height: 40px;">${content}</div>`
     }
     static getTemplate() {
         var c = ``;
@@ -160,11 +158,11 @@ class NotiWidget {
     }
 
     updateRunningStatus() {
-        console.log(`running : ${this._notifier.runningStatus}`)
         $('.status-js').text(`${this._notifier.runningStatus === true ? 'Running' : 'Stoped'}`);
         $('.status-js').css({ 'color': `${this._notifier.runningStatus === true ? '#1dbf73' : '#cf1e1e'}` });
         $('#notifier-js').css({ 'background': `${this._notifier.runningStatus === true ? '#1dbf73' : '#cf1e1e'}` });
         $('#db-toggle-notifier-status').attr('checked', this._notifier.runningStatus);
+        console.log(`Updating Status...`)
     }
 
     renderWidget() {
@@ -202,7 +200,7 @@ class NotiWidget {
             if (runningCheckValue === true) {
                 this.init();
             }
-            // stop shit 
+            // stop shit
             else {
                 this._notifier.runningStatus = false;
                 console.log(`interval {${this._notifier.interval}} stoped`)
@@ -216,7 +214,7 @@ class NotiWidget {
             $('.notifier-settings-wrapper').css({ 'display': 'none' });
         });
 
-        // storage settings 
+        // storage settings
         $('.save-settings-js').click(function (e) {
             e.preventDefault();
             var notiSet = new NotifierSettings($('#n-minuets').val(), $('#n-notify').is(':checked'));
@@ -227,7 +225,6 @@ class NotiWidget {
     }
 
     init() {
-        console.log('initializing...')
         if (this._storage.getSettings() === null) {
             this._storage.setSettings(new NotifierSettings())
         }
@@ -235,18 +232,19 @@ class NotiWidget {
         console.log(settings);
         this._notifier = new Notifier(settings._minuets);
         this._notifier.start();
+        console.log('initializing...')
     }
 
     run() {
-        console.log('running...')
         this.init();
         this.renderWidget();
+        console.log('running...')
         this.updateRunningStatus();
+        console.log(`Last Reload At :  ${new Date()}`);
     }
 }
 (function () {
     'use strict';
     var widget = new NotiWidget();
     widget.run();
-
 })();

@@ -65,5 +65,4 @@ function notifyMe(msg,interval) {
             window.location.reload();
         }
 },span);
-
 })();
