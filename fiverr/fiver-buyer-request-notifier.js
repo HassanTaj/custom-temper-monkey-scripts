@@ -4,7 +4,7 @@
 // @version      0.1
 // @description  try to take over the world!
 // @author       You
-// @match        https://www.fiverr.com/users/<your_user_name>/requests
+// @match        https://www.fiverr.com/users/*/requests*
 // @grant        none
 // ==/UserScript==
 
