@@ -29,6 +29,12 @@ class Notifier {
 
     // Methods
     // MDN way of doing notifications
+    getNotification(msg){
+        return new Notification('Fiver Notifier',{
+            body: msg,
+            icon: 'https://cdn.discordapp.com/attachments/720994921435234304/724286369488175195/pv_icon.ico',
+        });
+    }
     notify(msg, interval) {
         // Let's check if the browser supports notifications
         var notification = undefined;
@@ -39,7 +45,7 @@ class Notifier {
         // Let's check whether notification permissions have already been granted
         else if (Notification.permission === "granted") {
             // If it's okay let's create a notification
-            notification = new Notification(msg);
+            notification = this.getNotification(msg);
         }
 
         // Otherwise, we need to ask the user for permission
@@ -47,10 +53,12 @@ class Notifier {
             Notification.requestPermission().then(function (permission) {
                 // If the user accepts, let's create a notification
                 if (permission === "granted") {
-                    notification = new Notification(msg);
+                    notification = this.getNotification(msg); //new Notification(msg);
                 }
             });
         }
+
+        console.log(`actions ${notification.actions}`);
         // At last, if the user has denied notifications, and you
         // want to be respectful there is no need to bother them any more.
         // TODO: not clear what to do here so fuck it for now.
@@ -66,6 +74,7 @@ class Notifier {
     start() {
         var minuet = (1000 * 60);
         var span = (minuet * this._minutes);
+
         this._interval = setInterval(function () {
             var trs = $('table').children("tbody").children("tr");
             var requestLength = trs.length;
