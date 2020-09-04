@@ -72,10 +72,9 @@ class Notifier {
                 // no requests are found set request length to 0
                 requestLength = notFound === true ? 0 : requestLength;
             }
-            
             // if 1 or more buyer requests are found notify otherwise clear interval and reload.
-            if (requestLength > 0 && this._showDesktopNotification === true) {
-                this.notify(`Buyer Requests Available : ${requestLength}`, this._interval);
+            if (requestLength > 0 && this._showDesktopNotification===true) {
+                    this.notify(`Buyer Requests Available : ${requestLength}`, this._interval);
             } else {
                 clearInterval(this._interval);
                 window.location.reload();
