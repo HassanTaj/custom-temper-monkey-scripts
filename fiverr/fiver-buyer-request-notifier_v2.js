@@ -8,17 +8,17 @@
 // @grant        none
 // ==/UserScript==
 
-
 class NotifierSettings {
-    constructor(minuets = 5, notify = true) {
-        this._minuets = minuets;
+    constructor(minutes = 5, notify = true) {
+        this._minutes = minutes;
         this._notify = notify;
     }
 }
 
 class Notifier {
-    constructor(minuets = undefined) {
-        this._minuets = (minuets === undefined) ? 5 : minuets;
+    constructor(settings = undefined) {
+        this._minutes = (settings === undefined) ? 5 : settings._minutes;
+        this._showDesktopNotification = (settings === undefined) ? true : settings._notify;
         this._interval = undefined;
         this._isRunning = true;
     }
@@ -61,7 +61,7 @@ class Notifier {
 
     start() {
         var minuet = (1000 * 60);
-        var span = (minuet * this._minuets);
+        var span = (minuet * this._minutes);
         this._interval = setInterval(function () {
             var trs = $('table').children("tbody").children("tr");
             var requestLength = trs.length;
@@ -72,8 +72,9 @@ class Notifier {
                 // no requests are found set request length to 0
                 requestLength = notFound === true ? 0 : requestLength;
             }
+            
             // if 1 or more buyer requests are found notify otherwise clear interval and reload.
-            if (requestLength > 0) {
+            if (requestLength > 0 && this._showDesktopNotification === true) {
                 this.notify(`Buyer Requests Available : ${requestLength}`, this._interval);
             } else {
                 clearInterval(this._interval);
@@ -87,7 +88,7 @@ class Notifier {
     set runningStatus(newStatus) { this._isRunning = newStatus }
 
     get interval() { return this._interval; }
-    get minuets() { return this._minuets; }
+    get minuets() { return this._minutes; }
 }
 
 class StorageHelper {
@@ -230,7 +231,7 @@ class NotiWidget {
         }
         var settings = this._storage.getSettings();
         console.log(settings);
-        this._notifier = new Notifier(settings._minuets);
+        this._notifier = new Notifier(settings);
         this._notifier.start();
         console.log('initializing...')
     }
@@ -243,6 +244,7 @@ class NotiWidget {
         console.log(`Last Reload At :  ${new Date()}`);
     }
 }
+
 (function () {
     'use strict';
     var widget = new NotiWidget();
