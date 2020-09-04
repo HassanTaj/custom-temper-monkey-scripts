@@ -8,6 +8,10 @@
 // @grant        none
 // ==/UserScript==
 
+
+
+
+
 class NotifierSettings {
     constructor(minutes = 5, notify = true) {
         this._minutes = minutes;
@@ -87,7 +91,7 @@ class Notifier {
     set runningStatus(newStatus) { this._isRunning = newStatus }
 
     get interval() { return this._interval; }
-    get minuets() { return this._minutes; }
+    get minutes() { return this._minutes; }
 }
 
 class StorageHelper {
@@ -128,7 +132,7 @@ class NotiWidget {
         c += `<button class="notifier-widget-close-js" style="float: right;background: red;border: 1px solid red;padding: 0px 5px 5px 8px;color: white;position: absolute;right: 0;top: 0;border-radius: 0px 0px 0px 18px;">&#10006;</button>`
         c += ``;
         c += `<section class="form-wrapper" style="padding: 12px 5px 0px;">`;
-        c += `<input type="number" id="n-minuets" class="false" placeholder="Minuets" maxlength="150">`;
+        c += `<input type="number" id="n-minutes" class="false" placeholder="Minutes" maxlength="150">`;
         c += `<div class="item-cell" style="margin: 10px 0px 0px 0px;">
         <span class="">
             <label class="fake-check-black" for="n-notify">
@@ -189,7 +193,7 @@ class NotiWidget {
             e.preventDefault();
             $('.notifier-settings-wrapper').css({ 'display': 'block' });
             var settings = this._storage.getSettings();
-            $('#n-minuets').val(settings._minuets);
+            $('#n-minutes').val(settings._minutes);
             $('#n-notify').attr('checked', settings._notify);
         }.bind(this));
 
@@ -217,7 +221,7 @@ class NotiWidget {
         // storage settings
         $('.save-settings-js').click(function (e) {
             e.preventDefault();
-            var notiSet = new NotifierSettings($('#n-minuets').val(), $('#n-notify').is(':checked'));
+            var notiSet = new NotifierSettings($('#n-minutes').val(), $('#n-notify').is(':checked'));
             this._storage.removeSettings();
             this._storage.setSettings(notiSet);
             this.init();
